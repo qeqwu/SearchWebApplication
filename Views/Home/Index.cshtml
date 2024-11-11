@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Search</h1>
+    <input type="text" id="searchBox" placeholder="Начните вводить текст..." />
+    <ul id="resultList"></ul>
+</div>
+<script>
+    document.getElementById('searchBox').addEventListener('input', async function () {
+        const query = this.value;
+        const resultsList = document.getElementById('resultList');
+        resultsList.innerHTML = '';
+        if (query.length === 0) {
+            
+            return;
+        }
+
+        if (query.length >= 1) {
+            const response = await fetch(`/search?query=${encodeURIComponent(query)}`);
+            const data = await response.json();
+            resultsList.innerHTML = '';
+
+            data.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                resultsList.appendChild(li);
+            });
+        }
+    });
+</script>
